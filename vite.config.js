@@ -12,5 +12,8 @@ export default defineConfig({
   server: process.env.CODEX_SANDBOX === "seatbelt"
     ? { watch: { useFsEvents: false, usePolling: true } }
     : undefined,
+  environments: {
+    holodeck_sites: { build: { outDir: "dist/server" } },
+  },
   plugins: [sites(), cloudflare()],
 });

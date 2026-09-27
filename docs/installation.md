@@ -32,6 +32,8 @@ npm run start
 
 Vor der Übernahme von Codeänderungen werden mindestens `npm run build` und `npm audit --omit=dev` ausgeführt. Ein Audit-Befund ist zu prüfen, nicht stillschweigend durch eine ungeprüfte Paketaktualisierung zu beheben. Änderungen am Anmelde- oder Echtzeitfluss benötigen zusätzlich einen Test mit gültigem Ticket sowie die Prüfung, dass manipulierte, abgelaufene oder falsch gebundene Tickets abgelehnt werden.
 
+Der Build legt die Web-App in `dist/client/` und den Sites-Worker in `dist/server/` ab. Ein Sites-Paket enthält diese beiden Verzeichnisse und die lokale `.openai/hosting.json` an der Archivwurzel. `node_modules/` und der übrige Quellcode gehören nicht in dieses Paket. Das Paket ersetzt nicht den zugehörigen Quellcommit: Übertrage ihn über den Sites-Workflow, bevor du daraus eine Version speicherst.
+
 ## ChatGPT Sites mit dem lokalen Checkout verbinden
 
 Der lokale Start und Build funktionieren ohne Sites-Zuordnung. Ein solcher Build dient der lokalen Prüfung und enthält keine Sites-Hosting-Konfiguration. Für ein Sites-Paket ordne zuerst die richtige Site zu und baue danach erneut. Erst wenn du den heutigen Munava-Prototyp mit seiner bestehenden Site abgleichen, dort eine Version speichern oder eine eigene Site einrichten willst, brauchst du einen berechtigten Sites-Zugang. Eine Site ist ein eigenständiges gehostetes Projekt und nicht dasselbe wie ein ChatGPT-Projekt oder das GitHub-Repository. Die [Sites-Dokumentation von OpenAI](https://learn.chatgpt.com/docs/sites) beschreibt die Projektzuordnung und die getrennten Schritte Speichern und Veröffentlichen.
