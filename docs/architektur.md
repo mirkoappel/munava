@@ -132,6 +132,10 @@ ChatGPT Sites eignet sich für den Prototypen, weil Änderungen schnell in der V
 
 ChatGPT Sites trägt die aktuelle Prototyping-Phase. Portable Programme und Kernkonzepte halten zugleich den Weg für weitere geeignete Infrastrukturen offen.
 
+## Perspektive: externe oder integrierte KI
+
+Die heutige Trennung von Browseranwendung und Desktop-Agent kann bestehen bleiben. KI-Agenten könnten Anwendungen künftig auf verschiedenen Geräten einrichten, anpassen und gemeinsam mit Menschen weiterentwickeln; auch direkt auf VR-Brillen oder Smart Glasses. Ebenso ist eine integrierte Fassung denkbar, in der Sprachdialog und Agentenfähigkeiten aus Nutzersicht Teil von Munava sind. Die Architektur soll beide Wege ermöglichen, ohne dauerhaft an ein bestimmtes KI-Produkt gebunden zu sein.
+
 ## Sicherheitsgrenzen
 
 - Secrets bleiben vollständig in den serverseitigen Umgebungen.
@@ -168,4 +172,4 @@ Die Codebasis ist bewusst klein gehalten. Ihre Kernwerkzeuge sind Vite, der Clou
 ## Weiterführende Dokumentation
 
 - [Projektübersicht](../README.md)
-- [Den Prototyp ausprobieren und mitentwickeln](ausprobieren-und-mitentwickeln.md)
+- [Installation, Entwicklung und Betrieb](installation.md)

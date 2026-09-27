@@ -13,5 +13,4 @@ Dieser Ordner ergänzt die Projektvorstellung von Munava in der Haupt-README um 
 
 ## Anleitungen
 
-- [Den Prototyp ausprobieren und mitentwickeln](ausprobieren-und-mitentwickeln.md): heutiger Versuchsaufbau mit Meta Quest, ChatGPT-Desktop-App, Codex und ChatGPT Sites sowie der geplante offene Einstieg.
-- [Entwicklung und Betrieb](entwicklung.md): lokaler Start, sicherheitsrelevante Konfiguration und Qualitätsprüfungen.
+- [Installation, Entwicklung und Betrieb](installation.md): Klonen, lokaler Start, Sites-Zuordnung, Quest-Versuchsaufbau, Bereitstellung, sicherheitsrelevante Konfiguration und Qualitätsprüfungen.

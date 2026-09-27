@@ -70,7 +70,7 @@ Den Kern der Idee kannst du heute bereits erproben: Du erlebst eine Welt, bespri
 
 **Einfache Installation:** Geplant ist ein ChatGPT-Plugin, das dem Desktop-Agenten klare Installationsanweisungen bereitstellt. So kann die KI bereits bei der Installation und Einrichtung deiner eigenen Munava-Installation unterstützen. Dieses Repository dient dabei als Quelle für die Projektdateien, den Programmcode und die Dokumentation.
 
-Weitere Details zur Installation und Einrichtung findest du in der [vertiefenden Anleitung](docs/ausprobieren-und-mitentwickeln.md).
+Den Versuchsaufbau und die konkreten Schritte erklärt [Installation, Entwicklung und Betrieb](docs/installation.md). Die ergänzenden Arbeitsanweisungen für KI-Agenten stehen in [AGENTS.md](AGENTS.md).
 
 ## Architekturübersicht
 
