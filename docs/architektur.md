@@ -153,17 +153,21 @@ Die Ordnerstruktur bildet den aktuellen Prototyp ab und kann sich mit der Archit
 ```text
 .
 ├── index.html              Einstieg in die Browseranwendung
-├── client/                 Colyseus-Verbindung und Synchronisation
-├── docs/                   vertiefende Projekt- und Entwicklungsdokumentation
-├── public/
-│   ├── core/               WebXR-Laufzeit und gemeinsame Werkzeuge
-│   │   └── blocks/         versionierte, wiederverwendbare Bausteine
-│   └── programs/           Holodeck, Wild West und Sherlock Holmes
-├── worker/                 serverseitiger Ticket-Endpunkt
+├── src/
+│   ├── client/             Colyseus-Verbindung und Synchronisation
+│   ├── public/
+│   │   ├── core/           WebXR-Laufzeit und gemeinsame Werkzeuge
+│   │   │   └── blocks/     versionierte, wiederverwendbare Bausteine
+│   │   └── programs/       Holodeck, Wild West und Sherlock Holmes
+│   └── worker/             serverseitiger Ticket-Endpunkt
 ├── build/                  Sites-spezifischer Build-Adapter
+├── docs/                   vertiefende Projekt- und Entwicklungsdokumentation
+├── dist/                   lokal erzeugte, Git-ignorierte Build-Ausgabe
 ├── vite.config.js          Build-Konfiguration
 └── wrangler.json           Worker- und Asset-Konfiguration
 ```
+
+Vite übernimmt `src/public/` unverändert in `dist/client/`. Dadurch behalten Core, Blocks und Programme ihre bisherigen Web-Pfade unter `/core/` und `/programs/`.
 
 Die Zuordnung zu einem Sites-Projekt liegt bei Bedarf nur lokal in `.openai/hosting.json`. Der gesamte `.openai/`-Ordner gehört nicht zum öffentlichen Repository.
 
