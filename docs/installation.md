@@ -1,13 +1,10 @@
 # Installation, Entwicklung und Betrieb
 
-> [!NOTE]
-> Die lokale Installation, der Build und das Paket-Audit wurden geprüft. Die vollständige Sites-Bereitstellung und der Echtzeitbetrieb wurden mit dieser Anleitung noch nicht Ende zu Ende getestet. Prüfe vor einer Veröffentlichung den aktuellen Code, die Site-Zuordnung und die jeweils geltenden Produktabläufe.
-
 Diese Anleitung bündelt die Installation im lokalen Checkout, den Abgleich der Arbeitsstände, die Verbindung zu ChatGPT Sites und die wichtigsten Qualitätsprüfungen. Der Quellcode liegt im [öffentlichen GitHub-Repository](https://github.com/mirkoappel/munava). Der Colyseus-Echtzeitserver ist ein separates Betriebsprojekt und gehört nicht zu diesem Repository.
 
 ## Voraussetzungen und Grenzen
 
-Benötigt werden Node.js ab Version 22.13.0, npm und ein nicht über Google Drive synchronisierter Arbeitsordner. Der lokale Web-Build benötigt noch keine Sites-Zuordnung. Für die Arbeit an einer bestehenden Site ist ein berechtigter ChatGPT-Sites-Zugang nötig. Der vollständige Echtzeitbetrieb benötigt zusätzlich den separat betriebenen Colyseus-Server und passende Signaturschlüssel. Im Quellcode sind derzeit die Deckeins-WebSocket-Adresse und Ticket-Parameter hinterlegt; eine unabhängige Installation muss diese Werte und den Serverbetrieb eigens einrichten.
+Benötigt werden Node.js ab Version 22.13.0, npm und ein Arbeitsordner außerhalb cloud-synchronisierter Projektverzeichnisse. Der lokale Web-Build benötigt noch keine Sites-Zuordnung. Für die Arbeit an einer bestehenden Site ist ein berechtigter ChatGPT-Sites-Zugang nötig. Der vollständige Echtzeitbetrieb benötigt zusätzlich den separat betriebenen Colyseus-Server und passende Signaturschlüssel. Im Quellcode sind derzeit die Deckeins-WebSocket-Adresse und Ticket-Parameter hinterlegt; eine unabhängige Installation muss diese Werte und den Serverbetrieb eigens einrichten.
 
 ## Repository klonen und lokal starten
 
@@ -20,7 +17,7 @@ npm ci
 npm run dev
 ```
 
-In einem vorhandenen Checkout prüfst du vor dem Aktualisieren mit `git status` lokale Änderungen und neue Dateien. Kläre sie, bevor du den GitHub-Stand holst; ein `git pull --ff-only` eignet sich, wenn der Arbeitsbaum dafür bereit ist. `npm ci` installiert die im Lockfile festgelegten Pakete nur im lokalen Checkout. `node_modules/`, Build-Ergebnisse und lokale Laufzeitdaten gehören nicht nach GitHub oder in den synchronisierten Projektordner.
+In einem vorhandenen Checkout prüfst du vor dem Aktualisieren mit `git status` lokale Änderungen und neue Dateien. Kläre sie, bevor du den GitHub-Stand holst; ein `git pull --ff-only` eignet sich, wenn der Arbeitsbaum dafür bereit ist. `npm ci` installiert die im Lockfile festgelegten Pakete nur im lokalen Checkout. `node_modules/`, Build-Ergebnisse und lokale Laufzeitdaten gehören nicht nach GitHub oder in cloud-synchronisierte Projektordner.
 
 Der lokale Entwicklungsserver zeigt die Web-App im Browser. Ohne Sites-Anmeldung, Ticket-Secret und erreichbaren Colyseus-Server ist die vollständige Anmeldung und Mehrspieler-Synchronisation damit noch nicht nachgewiesen; eine entsprechende Verbindungsanzeige ist dann erwartbar.
 
@@ -35,11 +32,22 @@ npm run start
 
 Vor der Übernahme von Codeänderungen werden mindestens `npm run build` und `npm audit --omit=dev` ausgeführt. Ein Audit-Befund ist zu prüfen, nicht stillschweigend durch eine ungeprüfte Paketaktualisierung zu beheben. Änderungen am Anmelde- oder Echtzeitfluss benötigen zusätzlich einen Test mit gültigem Ticket sowie die Prüfung, dass manipulierte, abgelaufene oder falsch gebundene Tickets abgelehnt werden.
 
-## Bestehende ChatGPT-Site zuordnen
+## ChatGPT Sites mit dem lokalen Checkout verbinden
 
-Das öffentliche Repository enthält keinen `.openai/`-Ordner. Die Datei `.openai/hosting.json` hält die Zuordnung zu einem Sites-Projekt ausschließlich im jeweiligen lokalen Checkout; der gesamte Ordner wird von Git ignoriert. In einem neuen Klon ermittelst du die bestehende Site über ein berechtigtes Sites-Konto, legst ihre tatsächliche Zuordnung lokal an und prüfst vor einem Schreibvorgang, dass sie auf die beabsichtigte Site zeigt. Eine Projekt-ID darf nicht geraten oder aus einem Namen abgeleitet werden. Fehlen Zugang oder eindeutige Zuordnung, stoppe die Sites-Arbeit, statt eine zweite Site anzulegen oder die falsche zu verändern. Wer eine eigene Installation aufbauen will, richtet mit eigenem Sites-Zugang bewusst ein eigenes Projekt ein.
+Der lokale Start und Build funktionieren ohne Sites-Zuordnung. Erst wenn du den heutigen Munava-Prototyp mit seiner bestehenden Site abgleichen, dort eine Version speichern oder eine eigene Site einrichten willst, brauchst du einen berechtigten Sites-Zugang. Eine Site ist ein eigenständiges gehostetes Projekt und nicht dasselbe wie ein ChatGPT-Projekt oder das GitHub-Repository. Die [Sites-Dokumentation von OpenAI](https://learn.chatgpt.com/docs/sites) beschreibt die Projektzuordnung und die getrennten Schritte Speichern und Veröffentlichen.
 
-Die [Sites-Dokumentation von OpenAI](https://learn.chatgpt.com/docs/sites) erklärt die Projektzuordnung sowie den Unterschied zwischen gespeicherten Versionen und Deployments. Die lokale Datei enthält keine Zugangsdaten oder Secrets. Der Ticket-Endpunkt erwartet den privaten Signaturschlüssel als Sites-Secret `HOLODECK_TICKET_PRIVATE_JWK`; für einen lokalen End-to-End-Test darf der Wert ausschließlich in einer ignorierten `.dev.vars` liegen. Secrets gehören weder ins Repository noch in Prompts oder angehängte Dateien.
+### Bestehende Munava-Site in einem neuen Klon zuordnen
+
+1. **Site finden:** Öffne ChatGPT Sites mit dem berechtigten Konto und dem richtigen Workspace. Suche die bestehende Site in der Sites-Übersicht. Wenn Sites-Werkzeuge verfügbar sind, können sie die zugänglichen Projekte auflisten und das ausgewählte Projekt im Detail anzeigen.
+2. **Identität prüfen:** Vergleiche Eigentümer, Titel, Site-Adresse sowie gespeicherten und veröffentlichten Stand mit dem beabsichtigten Projekt. Ermittle die tatsächliche Projektkennung aus dem berechtigten Sites-Zugang; leite sie nicht aus Titel oder Adresse ab. Ist sie nicht eindeutig zugänglich, stoppe die Sites-Einrichtung und frage die berechtigte Person, statt eine zweite Site zu erstellen.
+3. **Lokal zuordnen:** Lege im lokalen Klon `.openai/hosting.json` an und übernimm die Kennung unverändert als `project_id`. Übernimm optionale Speicher-Bindungen nur, wenn sie für diese Site tatsächlich eingerichtet sind. Das öffentliche Repository enthält keinen `.openai/`-Ordner; die Zuordnung bleibt in jedem Klon lokal.
+4. **Zuordnung verifizieren:** Lies das Projekt über die eben eingetragene Kennung erneut mit dem berechtigten Sites-Zugang und prüfe, dass es noch immer die beabsichtigte Site ist. Vergewissere dich außerdem mit `git check-ignore .openai/hosting.json`, dass Git die lokale Datei ignoriert. Erst danach darfst du einen Sites-Schreibvorgang vorbereiten.
+
+### Eine eigene Site für eine unabhängige Installation anlegen
+
+Prüfe zuerst, ob für diese Installation bereits ein passendes Sites-Projekt existiert. Nur wenn eine neue Site ausdrücklich beauftragt ist, starte in ChatGPT Sites aus dem lokalen Projekt eine neue Site. Übernimm die dabei erzeugte Projektkennung unverändert in die lokale Zuordnung und prüfe sie anschließend wie oben. Erstelle das Projekt nicht mehrfach und setze keine erfundene Kennung als Platzhalter in eine aktive Konfigurationsdatei. Eine neue Site ist nicht automatisch veröffentlicht; speichere eine erste Version zunächst ohne Deployment.
+
+Die lokale `hosting.json` enthält die Projektzuordnung, keine Zugangsdaten oder Secrets. Der Ticket-Endpunkt erwartet den privaten Signaturschlüssel als Sites-Secret `HOLODECK_TICKET_PRIVATE_JWK`; für einen lokalen End-to-End-Test darf der Wert ausschließlich in einer ignorierten `.dev.vars` liegen. Secrets gehören weder ins Repository noch in Prompts oder angehängte Dateien.
 
 ## Arbeitsstände abgleichen und Sites-Version prüfen
 
