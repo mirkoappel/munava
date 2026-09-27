@@ -154,12 +154,12 @@ Die Ordnerstruktur bildet den aktuellen Prototyp ab und kann sich mit der Archit
 .
 ├── index.html              Einstieg in die Browseranwendung
 ├── src/
-│   ├── client/             Colyseus-Verbindung und Synchronisation
-│   ├── public/
-│   │   ├── core/           WebXR-Laufzeit und gemeinsame Werkzeuge
-│   │   │   └── blocks/     versionierte, wiederverwendbare Bausteine
-│   │   └── programs/       Holodeck, Wild West und Sherlock Holmes
-│   └── worker/             serverseitiger Ticket-Endpunkt
+│   ├── client/             Browseranwendung und Colyseus-Verbindung
+│   │   └── public/
+│   │       ├── core/       WebXR-Laufzeit und gemeinsame Werkzeuge
+│   │       │   └── blocks/ versionierte, wiederverwendbare Bausteine
+│   │       └── programs/   Holodeck, Wild West und Sherlock Holmes
+│   └── server/             Ticket-Endpunkt als Cloudflare Worker
 ├── build/                  Sites-spezifischer Build-Adapter
 ├── docs/                   vertiefende Projekt- und Entwicklungsdokumentation
 ├── dist/                   lokal erzeugte, Git-ignorierte Build-Ausgabe
@@ -167,7 +167,7 @@ Die Ordnerstruktur bildet den aktuellen Prototyp ab und kann sich mit der Archit
 └── wrangler.json           Worker- und Asset-Konfiguration
 ```
 
-Vite übernimmt `src/public/` unverändert in `dist/client/`. Dadurch behalten Core, Blocks und Programme ihre bisherigen Web-Pfade unter `/core/` und `/programs/`.
+Vite übernimmt `src/client/public/` unverändert in `dist/client/`. Dadurch behalten Core, Blocks und Programme ihre bisherigen Web-Pfade unter `/core/` und `/programs/`. Der Quellordner `src/server/` wird als Worker nach `dist/server/` gebaut.
 
 Die Zuordnung zu einem Sites-Projekt liegt bei Bedarf nur lokal in `.openai/hosting.json`. Der gesamte `.openai/`-Ordner gehört nicht zum öffentlichen Repository.
 

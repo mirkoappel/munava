@@ -9,7 +9,7 @@ process.env.WRANGLER_REGISTRY_PATH ??= ".wrangler/dev-registry";
 process.env.MINIFLARE_REGISTRY_PATH ??= ".wrangler/registry";
 
 export default defineConfig({
-  publicDir: "src/public",
+  publicDir: "src/client/public",
   server: process.env.CODEX_SANDBOX === "seatbelt"
     ? { watch: { useFsEvents: false, usePolling: true } }
     : undefined,
