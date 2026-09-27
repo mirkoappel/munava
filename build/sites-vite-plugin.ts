@@ -178,6 +178,8 @@ export function sites({ mockAuth = true } = {}): Plugin {
       const drizzleSource = resolve(root, "drizzle");
 
       await rm(outputDirectory, { recursive: true, force: true });
+      // A local build can run without a Site; only a Sites package needs hosting config.
+      if (!(await exists(hostingConfig))) return;
       await mkdir(outputDirectory, { recursive: true });
 
       await cp(hostingConfig, resolve(outputDirectory, "hosting.json"));

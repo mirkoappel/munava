@@ -34,7 +34,7 @@ Vor der Übernahme von Codeänderungen werden mindestens `npm run build` und `np
 
 ## ChatGPT Sites mit dem lokalen Checkout verbinden
 
-Der lokale Start und Build funktionieren ohne Sites-Zuordnung. Erst wenn du den heutigen Munava-Prototyp mit seiner bestehenden Site abgleichen, dort eine Version speichern oder eine eigene Site einrichten willst, brauchst du einen berechtigten Sites-Zugang. Eine Site ist ein eigenständiges gehostetes Projekt und nicht dasselbe wie ein ChatGPT-Projekt oder das GitHub-Repository. Die [Sites-Dokumentation von OpenAI](https://learn.chatgpt.com/docs/sites) beschreibt die Projektzuordnung und die getrennten Schritte Speichern und Veröffentlichen.
+Der lokale Start und Build funktionieren ohne Sites-Zuordnung. Ein solcher Build dient der lokalen Prüfung und enthält keine Sites-Hosting-Konfiguration. Für ein Sites-Paket ordne zuerst die richtige Site zu und baue danach erneut. Erst wenn du den heutigen Munava-Prototyp mit seiner bestehenden Site abgleichen, dort eine Version speichern oder eine eigene Site einrichten willst, brauchst du einen berechtigten Sites-Zugang. Eine Site ist ein eigenständiges gehostetes Projekt und nicht dasselbe wie ein ChatGPT-Projekt oder das GitHub-Repository. Die [Sites-Dokumentation von OpenAI](https://learn.chatgpt.com/docs/sites) beschreibt die Projektzuordnung und die getrennten Schritte Speichern und Veröffentlichen.
 
 ### Bestehende Munava-Site in einem neuen Klon zuordnen
 
