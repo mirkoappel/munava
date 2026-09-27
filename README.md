@@ -135,6 +135,10 @@ Die technischen Voraussetzungen zur Umsetzung eines Holodeck-ähnlichen Systems 
 
 Der Munava-Prototyp geht diese Herausforderungen schrittweise an. Im Mittelpunkt steht zunächst der vollständige Kreislauf vom gesprochenen Wunsch bis zur sichtbaren Veränderung und zum gemeinsam gespeicherten Stand von Programm und Welt.
 
+## ChatGPT Sites mit einem Klon verbinden
+
+Die Zuordnung zu einem Sites-Projekt wird lokal in `.openai/hosting.json` gespeichert. Dieser Ordner ist nicht Teil des öffentlichen Repositories und wird von Git ignoriert. Richte für eine eigene Installation eine eigene Site ein. Wenn du an einer bereits bestehenden Site weiterarbeitest, identifiziere sie zuerst über ein berechtigtes Sites-Konto und stelle ihre Zuordnung im lokalen Klon wieder her. Prüfe vor dem Speichern einer Version, dass der Klon mit der beabsichtigten Site verbunden ist; lege bei unklarer Zuordnung nicht versehentlich ein neues Projekt an. Zugangsdaten und Secrets gehören nicht in diese Datei.
+
 ## Lizenz
 
 Der von Mirko Appel entwickelte Programmcode und die zugehörige Dokumentation stehen unter der [MIT-Lizenz](LICENSE). Enthaltene Drittanbieterdateien behalten ihre jeweils ausgewiesenen Lizenzen. Für künftig hinzukommende Medien-Assets werden die Nutzungsrechte gesondert ausgewiesen.

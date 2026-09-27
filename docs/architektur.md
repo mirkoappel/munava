@@ -158,9 +158,10 @@ Die Ordnerstruktur bildet den aktuellen Prototyp ab und kann sich mit der Archit
 ├── worker/                 serverseitiger Ticket-Endpunkt
 ├── build/                  Sites-spezifischer Build-Adapter
 ├── vite.config.js          Build-Konfiguration
-├── wrangler.json           Worker- und Asset-Konfiguration
-└── .openai/hosting.json    Zuordnung zum bestehenden Sites-Projekt
+└── wrangler.json           Worker- und Asset-Konfiguration
 ```
+
+Die Zuordnung zu einem Sites-Projekt liegt bei Bedarf nur lokal in `.openai/hosting.json`. Der gesamte `.openai/`-Ordner gehört nicht zum öffentlichen Repository.
 
 Die Codebasis ist bewusst klein gehalten. Ihre Kernwerkzeuge sind Vite, der Cloudflare-Vite-Adapter, das Colyseus-SDK und browsernatives WebXR. Vite erzeugt aus der lesbaren Quelle das Browser-Bundle und den ausführbaren Worker für die Sites-Laufzeit.
 
