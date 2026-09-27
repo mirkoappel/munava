@@ -160,19 +160,18 @@ Die Ordnerstruktur bildet den aktuellen Prototyp ab und kann sich mit der Archit
 │   │       ├── core/       WebXR-Laufzeit und gemeinsame Werkzeuge
 │   │       │   └── blocks/ versionierte, wiederverwendbare Bausteine
 │   │       └── programs/   Holodeck, Wild West und Sherlock Holmes
-│   └── server/             Ticket-Endpunkt als Cloudflare Worker
-├── build/                  Sites-spezifischer Build-Adapter
+│   └── server/             serverseitiger Ticket-Endpunkt
+├── build/                  Build-Skript und lokale Sites-Simulation
 ├── docs/                   vertiefende Projekt- und Entwicklungsdokumentation
 ├── dist/                   lokal erzeugte, Git-ignorierte Build-Ausgabe
-├── vite.config.js          Build-Konfiguration
-└── wrangler.json           Worker- und Asset-Konfiguration
+└── vite.config.js          Konfiguration des Browser-Builds
 ```
 
-Vite übernimmt `src/client/public/` unverändert in `dist/client/`. Dadurch behalten Core, Blocks und Programme ihre bisherigen Web-Pfade unter `/core/` und `/programs/`. Der Quellordner `src/server/` wird als Worker nach `dist/server/` gebaut.
+Vite übernimmt `src/client/public/` unverändert in `dist/client/`. Dadurch behalten Core, Blocks und Programme ihre bisherigen Web-Pfade unter `/core/` und `/programs/`. Das Build-Skript übernimmt den serverseitigen Ticket-Code als Worker-kompatibles Modul nach `dist/server/`. Lokal simuliert der Sites-Adapter die Anmeldung und leitet API-Anfragen an denselben Ticket-Code weiter.
 
 Die Zuordnung zu einem Sites-Projekt liegt bei Bedarf nur lokal in `.openai/hosting.json`. Der gesamte `.openai/`-Ordner gehört nicht zum öffentlichen Repository.
 
-Die Codebasis ist bewusst klein gehalten. Ihre Kernwerkzeuge sind Vite, der Cloudflare-Vite-Adapter, das Colyseus-SDK und browsernatives WebXR. Vite erzeugt aus der lesbaren Quelle das Browser-Bundle und den ausführbaren Worker für die Sites-Laufzeit.
+Die Codebasis ist bewusst klein gehalten. Ihre Kernwerkzeuge sind Vite, das Colyseus-SDK und browsernatives WebXR. Vite erzeugt das Browser-Bundle; der Ticket-Code benötigt für die Sites-Ausgabe kein Cloudflare-Build-Plugin und kein Wrangler-Paket. Ob Sites die beiden Ausgaben gemeinsam korrekt bereitstellt, muss vor der nächsten Veröffentlichung geprüft werden.
 
 ## Weiterführende Dokumentation
 

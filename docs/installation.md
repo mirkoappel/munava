@@ -19,7 +19,7 @@ npm run dev
 
 In einem vorhandenen Checkout prüfst du vor dem Aktualisieren mit `git status` lokale Änderungen und neue Dateien. Kläre sie, bevor du den GitHub-Stand holst; ein `git pull --ff-only` eignet sich, wenn der Arbeitsbaum dafür bereit ist. `npm ci` installiert die im Lockfile festgelegten Pakete nur im lokalen Checkout. `node_modules/`, Build-Ergebnisse und lokale Laufzeitdaten gehören nicht nach GitHub oder in cloud-synchronisierte Projektordner.
 
-Der lokale Entwicklungsserver zeigt die Web-App im Browser. Ohne Sites-Anmeldung, Ticket-Secret und erreichbaren Colyseus-Server ist die vollständige Anmeldung und Mehrspieler-Synchronisation damit noch nicht nachgewiesen; eine entsprechende Verbindungsanzeige ist dann erwartbar.
+Der lokale Entwicklungsserver zeigt die Web-App im Browser und simuliert die Sites-Anmeldung auf `localhost`. Der Ticket-Endpunkt läuft dabei aus dem gleichen Servercode wie im Build. Ohne lokalen Signaturschlüssel und erreichbaren Colyseus-Server ist die Mehrspieler-Synchronisation damit noch nicht nachgewiesen; eine entsprechende Verbindungsanzeige ist dann erwartbar.
 
 ## Build und lokale Prüfung
 
@@ -30,9 +30,9 @@ npm run build
 npm run start
 ```
 
-Vor der Übernahme von Codeänderungen werden mindestens `npm run build` und `npm audit --omit=dev` ausgeführt. Ein Audit-Befund ist zu prüfen, nicht stillschweigend durch eine ungeprüfte Paketaktualisierung zu beheben. Änderungen am Anmelde- oder Echtzeitfluss benötigen zusätzlich einen Test mit gültigem Ticket sowie die Prüfung, dass manipulierte, abgelaufene oder falsch gebundene Tickets abgelehnt werden.
+`npm run start` zeigt die gebaute Browser-App; es simuliert den Sites-Serverteil nicht. Für den lokalen Ticket-Endpunkt verwende `npm run dev`. Vor der Übernahme von Codeänderungen werden mindestens `npm test`, `npm run build` und `npm audit --omit=dev` ausgeführt. Ein Audit-Befund ist zu prüfen, nicht stillschweigend durch eine ungeprüfte Paketaktualisierung zu beheben. Änderungen am Anmelde- oder Echtzeitfluss benötigen zusätzlich einen Test mit gültigem Ticket sowie die Prüfung, dass manipulierte, abgelaufene oder falsch gebundene Tickets abgelehnt werden.
 
-Der Build legt die Web-App in `dist/client/` und den Sites-Worker in `dist/server/` ab. Ein Sites-Paket enthält diese beiden Verzeichnisse und die lokale `.openai/hosting.json` an der Archivwurzel. `node_modules/` und der übrige Quellcode gehören nicht in dieses Paket. Das Paket ersetzt nicht den zugehörigen Quellcommit: Übertrage ihn über den Sites-Workflow, bevor du daraus eine Version speicherst.
+Vite baut die Web-App nach `dist/client/`; das Build-Skript übernimmt den serverseitigen Ticket-Endpunkt nach `dist/server/`. Dafür sind weder Wrangler noch das Cloudflare-Vite-Plugin installiert. Ein Sites-Paket enthält diese beiden Verzeichnisse und die lokale `.openai/hosting.json` an der Archivwurzel. `node_modules/` und der übrige Quellcode gehören nicht in dieses Paket. Das Paket ersetzt nicht den zugehörigen Quellcommit: Übertrage ihn über den Sites-Workflow, bevor du daraus eine Version speicherst. Die gemeinsame Bereitstellung von Browserdateien und Ticket-Endpunkt ohne Cloudflare-Build-Werkzeuge ist lokal vorbereitet, aber auf Sites noch nicht erneut geprüft.
 
 ## ChatGPT Sites mit dem lokalen Checkout verbinden
 
@@ -49,7 +49,7 @@ Der lokale Start und Build funktionieren ohne Sites-Zuordnung. Ein solcher Build
 
 Prüfe zuerst, ob für diese Installation bereits ein passendes Sites-Projekt existiert. Nur wenn eine neue Site ausdrücklich beauftragt ist, starte in ChatGPT Sites aus dem lokalen Projekt eine neue Site. Übernimm die dabei erzeugte Projektkennung unverändert in die lokale Zuordnung und prüfe sie anschließend wie oben. Erstelle das Projekt nicht mehrfach und setze keine erfundene Kennung als Platzhalter in eine aktive Konfigurationsdatei. Eine neue Site ist nicht automatisch veröffentlicht; speichere eine erste Version zunächst ohne Deployment.
 
-Die lokale `hosting.json` enthält die Projektzuordnung, keine Zugangsdaten oder Secrets. Der Ticket-Endpunkt erwartet den privaten Signaturschlüssel als Sites-Secret `HOLODECK_TICKET_PRIVATE_JWK`; für einen lokalen End-to-End-Test darf der Wert ausschließlich in einer ignorierten `.dev.vars` liegen. Secrets gehören weder ins Repository noch in Prompts oder angehängte Dateien.
+Die lokale `hosting.json` enthält die Projektzuordnung, keine Zugangsdaten oder Secrets. Der Ticket-Endpunkt erwartet den privaten Signaturschlüssel als Sites-Secret `HOLODECK_TICKET_PRIVATE_JWK`; für einen lokalen End-to-End-Test kann derselbe Wert in einer ignorierten `.env.local` liegen. Vite liest ihn nur für den lokalen Server-Endpunkt ein; er darf keinen `VITE_`-Präfix erhalten, denn so benannte Werte können im Browser-Build landen. Secrets gehören weder ins Repository noch in Prompts oder angehängte Dateien.
 
 ## Arbeitsstände abgleichen und Sites-Version prüfen
 
