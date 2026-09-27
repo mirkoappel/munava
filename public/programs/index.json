@@ -1,0 +1,7 @@
+{
+  "programs": [
+    { "id": "holodeck", "name": "Holodeck", "module": "./holodeck/index.js", "revision": "2026-09-27T00:23:24.000Z", "blocks": [] },
+    { "id": "sherlock-holmes", "name": "Sherlock Holmes", "module": "./sherlock-holmes/index.js", "revision": "2026-09-27T00:23:24.000Z", "blocks": [] },
+    { "id": "wild-west", "name": "Wild West", "module": "./wild-west/index.js", "revision": "2026-09-27T00:23:24.000Z", "blocks": [] }
+  ]
+}

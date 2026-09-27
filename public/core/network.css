@@ -1,0 +1,9 @@
+#network-state[data-state="connected"] {
+  color: #b8fff1;
+  border-color: #3c8f7d;
+}
+
+#network-state[data-state="error"] {
+  color: #ffd4d4;
+  border-color: #9d5555;
+}

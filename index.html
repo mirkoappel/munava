@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#080d16">
+    <meta name="description" content="Ein betretbarer Raum für gemeinsame VR-Experimente.">
+    <title>Holodeck</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="stylesheet" href="/core/style.css">
+    <link rel="stylesheet" href="/core/network.css">
+  </head>
+  <body>
+    <div id="stage" aria-label="Interaktiver Holodeck-Raum"></div>
+    <header>
+      <div class="brand"><span class="mark">◇</span><span>HOLODECK</span></div>
+      <div class="indicators">
+        <span class="status" id="network-state">Mehrspieler-Verbindung startet</span>
+        <span class="status" id="live-state">Live-Verbindung startet</span>
+        <span class="status" id="status">Raum bereit</span>
+      </div>
+    </header>
+    <main class="panel">
+      <div class="eyebrow">RAUM 01 · LIVE-BÜHNE</div>
+      <h1>Betritt den Raum.</h1>
+      <p>Neue Szenen erscheinen hier, während du im Raum bleibst.</p>
+      <div class="actions"><button id="enter" type="button">Raum erkunden</button><span id="vr-slot"></span></div>
+      <p class="hint" id="hint">Am Computer: Maus zum Umsehen, W A S D zum Bewegen. In VR: Griffknopf zum Greifen, Trigger zum Klicken, linker Stick zum Bewegen und rechter Stick zum Drehen.</p>
+    </main>
+    <aside class="editor-panel" aria-label="Programm-Explorer und Testwerkzeuge">
+      <button type="button" data-holodeck-action="add-box">Quader hinzufügen</button>
+      <button type="button" data-holodeck-action="add-sphere">Kugel hinzufügen</button>
+      <button type="button" data-holodeck-action="save">Stand speichern</button>
+      <button type="button" data-holodeck-action="reset">Neu beginnen</button>
+      <button type="button" data-holodeck-action="exit-program">Programm beenden</button>
+      <span id="program-actions" aria-label="Programme"></span>
+    </aside>
+    <div class="crosshair" aria-hidden="true"></div>
+    <div class="bottom">HOLODECK <span>·</span> EXPERIMENTELLER RAUM</div>
+    <script type="importmap">{"imports":{"three":"/core/three.js/three.module.js"}}</script>
+    <script type="module" src="/client/holodeck-realtime.js"></script>
+  </body>
+</html>

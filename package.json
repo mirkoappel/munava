@@ -1,0 +1,28 @@
+{
+  "name": "holodeck-sites",
+  "version": "0.1.0",
+  "private": true,
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "start": "vite preview"
+  },
+  "dependencies": {
+    "@colyseus/sdk": "^0.18.4"
+  },
+  "devDependencies": {
+    "@cloudflare/vite-plugin": "1.37.1",
+    "vite": "8.0.13",
+    "wrangler": "4.92.0"
+  },
+  "type": "module",
+  "overrides": {
+    "ws": "8.22.0",
+    "miniflare": {
+      "sharp": "0.35.4"
+    }
+  }
+}
