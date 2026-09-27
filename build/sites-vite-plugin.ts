@@ -29,14 +29,12 @@ async function exists(path: string): Promise<boolean> {
   }
 }
 
-export function sites({ mockAuth = true } = {}): Plugin {
-  let root = process.cwd();
+export function sites({ mockAuth = true, projectRoot = process.cwd() } = {}): Plugin {
   let command: "build" | "serve" = "build";
 
   return {
     name: "sites",
     configResolved(config) {
-      root = config.root;
       command = config.command;
     },
     configureServer(server) {
@@ -173,9 +171,9 @@ export function sites({ mockAuth = true } = {}): Plugin {
     async closeBundle() {
       if (command !== "build") return;
 
-      const outputDirectory = resolve(root, "dist", ".openai");
-      const hostingConfig = resolve(root, ".openai", "hosting.json");
-      const drizzleSource = resolve(root, "drizzle");
+      const outputDirectory = resolve(projectRoot, "dist", ".openai");
+      const hostingConfig = resolve(projectRoot, ".openai", "hosting.json");
+      const drizzleSource = resolve(projectRoot, "drizzle");
 
       await rm(outputDirectory, { recursive: true, force: true });
       // A local build can run without a Site; only a Sites package needs hosting config.

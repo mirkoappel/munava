@@ -152,9 +152,10 @@ Die Ordnerstruktur bildet den aktuellen Prototyp ab und kann sich mit der Archit
 
 ```text
 .
-├── index.html              Einstieg in die Browseranwendung
 ├── src/
 │   ├── client/             Browseranwendung und Colyseus-Verbindung
+│   │   ├── index.html      Einstieg in die Browseranwendung
+│   │   ├── main.js         Client-Start und Mehrspieler-Verbindung
 │   │   └── public/
 │   │       ├── core/       WebXR-Laufzeit und gemeinsame Werkzeuge
 │   │       │   └── blocks/ versionierte, wiederverwendbare Bausteine
