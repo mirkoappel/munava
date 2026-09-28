@@ -33,7 +33,6 @@ Der Entwicklungsserver simuliert die Sites-Anmeldung auf `localhost`. Für einen
 
 Prüfe Änderungen und erzeuge den Build mit:
 ```sh
-npm test
 npm run build
 npm audit --omit=dev
 ```
