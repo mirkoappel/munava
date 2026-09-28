@@ -1,82 +1,65 @@
 # Installation, Entwicklung und Betrieb
 
-Diese Anleitung bündelt die Installation im lokalen Checkout, den Abgleich der Arbeitsstände, die Verbindung zu ChatGPT Sites und die wichtigsten Qualitätsprüfungen. Der Quellcode liegt im [öffentlichen GitHub-Repository](https://github.com/mirkoappel/munava). Der Colyseus-Echtzeitserver ist ein separates Betriebsprojekt und gehört nicht zu diesem Repository.
+Die [README](../README.md#hosting-mit-chatgpt-sites) erklärt das Zusammenspiel von GitHub, dem Git-Repository einer Site und ihren Versionen. Hier stehen die Schritte und Munava-spezifischen Voraussetzungen für die lokale Arbeit und den Test auf der Quest. Der Colyseus-Echtzeitserver ist ein separates Betriebsprojekt.
 
-## Voraussetzungen und Grenzen
+## Arbeitskopie einrichten
 
-Benötigt werden Node.js ab Version 22.13.0, npm und ein Arbeitsordner außerhalb cloud-synchronisierter Projektverzeichnisse. Der lokale Web-Build benötigt noch keine Sites-Zuordnung. Für die Arbeit an einer bestehenden Site ist ein berechtigter ChatGPT-Sites-Zugang nötig. Der vollständige Echtzeitbetrieb benötigt zusätzlich den separat betriebenen Colyseus-Server und passende Signaturschlüssel. Im Quellcode sind derzeit die Deckeins-WebSocket-Adresse und Ticket-Parameter hinterlegt; eine unabhängige Installation muss diese Werte und den Serverbetrieb eigens einrichten.
+Benötigt werden Node.js ab Version 22.13.0 und npm. 
+Arbeite außerhalb cloud-synchronisierter Projektordner wie Google Drive oder Dropbox, um sync Probleme, die durch den Build-Prozess ausgelöst werden können, zu vermeiden.
 
-## Repository klonen und lokal starten
+### Neue Site einrichten
 
-Beim ersten Einstieg:
-
-```sh
+Klone das öffentliche Munava-Repository als Ausgangspunkt:
+```
 git clone https://github.com/mirkoappel/munava.git
 cd munava
+```
+Lege die Site mit dem Sites-Plugin ohne Starter-Beispielcode an. Sites vergibt dabei eine Projektkennung für `.openai/hosting.json`. Übertrage den Munava-Quellcode in das Git-Repository der neuen Site. Danach ist dessen lokale Arbeitskopie der Ausgangspunkt für weitere Änderungen.
+
+### Bestehende Site weiterentwickeln
+
+Verwende ihre vorhandene lokale Arbeitskopie oder klone ihr Git-Repository mit berechtigtem Sites-Zugang. Prüfe vor Änderungen, ob die Arbeitskopie zur beabsichtigten Site gehört und ob lokale Änderungen oder neuere Commits vorliegen. Ein GitHub-Klon ersetzt diese Arbeitskopie nicht.
+
+## Pakete installieren und lokal starten
+
+In der Arbeitskopie installierst du die Pakete und startest die lokale Entwicklung:
+```sh
 npm ci
 npm run dev
 ```
+Der Entwicklungsserver simuliert die Sites-Anmeldung auf `localhost`. Für einen vollständigen Mehrspieler-Test brauchst du zusätzlich den separat betriebenen Colyseus-Server und passende Signaturschlüssel. Die Deckeins-WebSocket-Adresse und Ticket-Parameter sind derzeit im Quellcode hinterlegt; eine unabhängige Installation muss sie eigens anpassen.
 
-In einem vorhandenen Checkout prüfst du vor dem Aktualisieren mit `git status` lokale Änderungen und neue Dateien. Kläre sie, bevor du den GitHub-Stand holst; ein `git pull --ff-only` eignet sich, wenn der Arbeitsbaum dafür bereit ist. `npm ci` installiert die im Lockfile festgelegten Pakete nur im lokalen Checkout. `node_modules/`, Build-Ergebnisse und lokale Laufzeitdaten gehören nicht nach GitHub oder in cloud-synchronisierte Projektordner.
+## Lokal bauen und prüfen
 
-Der lokale Entwicklungsserver zeigt die Web-App im Browser und simuliert die Sites-Anmeldung auf `localhost`. Der Ticket-Endpunkt läuft dabei aus dem gleichen Servercode wie im Build. Ohne lokalen Signaturschlüssel und erreichbaren Colyseus-Server ist die Mehrspieler-Synchronisation damit noch nicht nachgewiesen; eine entsprechende Verbindungsanzeige ist dann erwartbar.
-
-## Build und lokale Prüfung
-
-Die produktionsnahe Ausgabe entsteht mit:
-
+Prüfe Änderungen und erzeuge den Build mit:
 ```sh
+npm test
 npm run build
-npm run start
+npm audit --omit=dev
 ```
+Die gebaute Browser-App kannst du mit `npm run start` ansehen; der Ticket-Endpunkt läuft dabei nicht mit. Dafür nutze `npm run dev`.
+Der Build erzeugt `dist/client/` für die Web-App und `dist/server/` für den Ticket-Endpunkt. Er benötigt lokal noch keine Site-Zuordnung. Installierte Pakete und Build-Ausgaben gehören nicht in die Git-Repositories.
 
-`npm run start` zeigt die gebaute Browser-App; es simuliert den Sites-Serverteil nicht. Für den lokalen Ticket-Endpunkt verwende `npm run dev`. Vor der Übernahme von Codeänderungen werden mindestens `npm test`, `npm run build` und `npm audit --omit=dev` ausgeführt. Ein Audit-Befund ist zu prüfen, nicht stillschweigend durch eine ungeprüfte Paketaktualisierung zu beheben. Änderungen am Anmelde- oder Echtzeitfluss benötigen zusätzlich einen Test mit gültigem Ticket sowie die Prüfung, dass manipulierte, abgelaufene oder falsch gebundene Tickets abgelehnt werden.
+## Für ChatGPT Sites bereitstellen
 
-Vite baut die Web-App nach `dist/client/`; das Build-Skript übernimmt den serverseitigen Ticket-Endpunkt nach `dist/server/`. Dafür sind weder Wrangler noch das Cloudflare-Vite-Plugin installiert. Ein Sites-Paket enthält diese beiden Verzeichnisse und die lokale `.openai/hosting.json` an der Archivwurzel. `node_modules/` und der übrige Quellcode gehören nicht in dieses Paket. Das Paket ersetzt nicht den zugehörigen Quellcommit: Übertrage ihn über den Sites-Workflow, bevor du daraus eine Version speicherst. Die gemeinsame Bereitstellung von Browserdateien und Ticket-Endpunkt ohne Cloudflare-Build-Werkzeuge ist lokal vorbereitet, aber auf Sites noch nicht erneut geprüft.
+Prüfe vor der Übertragung die lokale `.openai/hosting.json` gegen die beabsichtigte Site. Bei einer neuen Site übernimmt sie die von Sites vergebene Kennung; bei einer bestehenden Site bleibt deren vorhandene Zuordnung erhalten. Die Datei gehört in den Quellcommit der Site, aber NICHT ins öffentliche GitHub-Repository. Da die aus GitHub übernommene `.gitignore` sie ausblendet, erfasse sie nur im Checkout des Site-Repositories ausdrücklich mit `git add -f .openai/hosting.json` und prüfe den Commit vor dem Push.
 
-## ChatGPT Sites mit dem lokalen Checkout verbinden
+Das Sites-Plugin bereitet aus `dist/` ein `.tar.gz`-Paket vor, einschließlich einer Kopie der Hosting-Konfiguration unter `dist/.openai/hosting.json`. Das Paket enthält nicht den übrigen Quellcode: Der dazu passende Quellcommit wird getrennt in das Git-Repository der Site übertragen. Folge für Paketierung, Versionsanlage und Veröffentlichung dem aktuellen Ablauf des Sites-Plugins und der [Sites-Dokumentation](https://learn.chatgpt.com/docs/sites). Eine angelegte Version ist noch nicht live; erst eine gesonderte Veröffentlichung macht sie erreichbar.
 
-Der lokale Start und Build funktionieren ohne Sites-Zuordnung. Ein solcher Build dient der lokalen Prüfung und enthält keine Sites-Hosting-Konfiguration. Für ein Sites-Paket ordne zuerst die richtige Site zu und baue danach erneut. Erst wenn du den heutigen Munava-Prototyp mit seiner bestehenden Site abgleichen, dort eine Version speichern oder eine eigene Site einrichten willst, brauchst du einen berechtigten Sites-Zugang. Eine Site ist ein eigenständiges gehostetes Projekt und nicht dasselbe wie ein ChatGPT-Projekt oder das GitHub-Repository. Die [Sites-Dokumentation von OpenAI](https://learn.chatgpt.com/docs/sites) beschreibt die Projektzuordnung und die getrennten Schritte Speichern und Veröffentlichen.
+Der Ticket-Endpunkt benötigt das Sites-Secret `HOLODECK_TICKET_PRIVATE_JWK`. Für lokale End-to-End-Tests kann der Wert in einer ignorierten `.env.local` liegen. Setze keinen `VITE_`-Präfix davor: So benannte Werte können im Browser-Build landen. Secret-Werte gehören weder in Git noch in die Hosting-Konfiguration.
 
-### Bestehende Munava-Site in einem neuen Klon zuordnen
-
-1. **Site finden:** Öffne ChatGPT Sites mit dem berechtigten Konto und dem richtigen Workspace. Suche die bestehende Site in der Sites-Übersicht. Wenn Sites-Werkzeuge verfügbar sind, können sie die zugänglichen Projekte auflisten und das ausgewählte Projekt im Detail anzeigen.
-2. **Identität prüfen:** Vergleiche Eigentümer, Titel, Site-Adresse sowie gespeicherten und veröffentlichten Stand mit dem beabsichtigten Projekt. Ermittle die tatsächliche Projektkennung aus dem berechtigten Sites-Zugang; leite sie nicht aus Titel oder Adresse ab. Ist sie nicht eindeutig zugänglich, stoppe die Sites-Einrichtung und frage die berechtigte Person, statt eine zweite Site zu erstellen.
-3. **Lokal zuordnen:** Lege im lokalen Klon `.openai/hosting.json` an und übernimm die Kennung unverändert als `project_id`. Übernimm optionale Speicher-Bindungen nur, wenn sie für diese Site tatsächlich eingerichtet sind. Das öffentliche Repository enthält keinen `.openai/`-Ordner; die Zuordnung bleibt in jedem Klon lokal.
-4. **Zuordnung verifizieren:** Lies das Projekt über die eben eingetragene Kennung erneut mit dem berechtigten Sites-Zugang und prüfe, dass es noch immer die beabsichtigte Site ist. Vergewissere dich außerdem mit `git check-ignore .openai/hosting.json`, dass Git die lokale Datei ignoriert. Erst danach darfst du einen Sites-Schreibvorgang vorbereiten.
-
-### Eine eigene Site für eine unabhängige Installation anlegen
-
-Prüfe zuerst, ob für diese Installation bereits ein passendes Sites-Projekt existiert. Nur wenn eine neue Site ausdrücklich beauftragt ist, starte in ChatGPT Sites aus dem lokalen Projekt eine neue Site. Übernimm die dabei erzeugte Projektkennung unverändert in die lokale Zuordnung und prüfe sie anschließend wie oben. Erstelle das Projekt nicht mehrfach und setze keine erfundene Kennung als Platzhalter in eine aktive Konfigurationsdatei. Eine neue Site ist nicht automatisch veröffentlicht; speichere eine erste Version zunächst ohne Deployment.
-
-Die lokale `hosting.json` enthält die Projektzuordnung, keine Zugangsdaten oder Secrets. Der Ticket-Endpunkt erwartet den privaten Signaturschlüssel als Sites-Secret `HOLODECK_TICKET_PRIVATE_JWK`; für einen lokalen End-to-End-Test kann derselbe Wert in einer ignorierten `.env.local` liegen. Vite liest ihn nur für den lokalen Server-Endpunkt ein; er darf keinen `VITE_`-Präfix erhalten, denn so benannte Werte können im Browser-Build landen. Secrets gehören weder ins Repository noch in Prompts oder angehängte Dateien.
-
-## Arbeitsstände abgleichen und Sites-Version prüfen
-
-Vor neuer Arbeit an der bestehenden Site vergleiche den tatsächlichen lokalen Dateistand und `git status` mit GitHub sowie der neuesten gespeicherten und der veröffentlichten Sites-Version. Eine Änderung aus einem anderen Rechner oder einer Cloud-Umgebung kann nur in Sites vorliegen. Ein GitHub-Pull holt sie nicht automatisch. Prüfe den Quellcommit und den Inhalt der betreffenden Sites-Version, kläre beabsichtigte Unterschiede und führe dauerhafte Änderungen gezielt in den Checkout zurück. Solange die Richtung unklar ist, weder Sites noch den lokalen Stand überschreiben.
-
-Für einen Sites-Test muss der exakte, committete Quellstand über den Sites-Workflow übertragen werden; die gespeicherte Version wird diesem Commit zugeordnet. Ein GitHub-Push ersetzt diesen Sites-Schritt nicht. Umgekehrt muss nicht jede Testschleife sofort nach GitHub gepusht werden. Dauerhafte Änderungen gehören nach der Prüfung in den maßgeblichen GitHub-Stand.
-
-Speichere zuerst eine Sites-Version und prüfe sie. Erst ein gesondertes Deployment veröffentlicht eine gespeicherte Version. Jede Deployment-URL ist ein Produktionsstand, auch wenn sie nur zum Testen auf der Quest genutzt wird. Vor einem Deployment prüfe die Site-Zuordnung, den Quellcommit, die gespeicherte Version, die Zielgruppe und den bisherigen Live-Stand. Nach einer Veröffentlichung umfasst der Betriebscheck die Anmeldung, den sichtbaren Echtzeitstatus und einen gemeinsamen Objekttest auf Desktop und Quest.
+**Einmaliger Wechsel vom bisherigen Dev-Klon:** Liegt ein neuer, geprüfter Stand nur im GitHub-basierten Dev-Klon, übernimm seine Quelldateien einmalig in eine Arbeitskopie des bestehenden Site-Repositories und sichere sie dort als Commit. Dessen Git-Historie und Hosting-Zuordnung bleiben erhalten. Für spätere Testschleifen arbeitest du direkt in dieser Arbeitskopie; ein GitHub-Backup erfolgt nur für ausgewählte, freigegebene Meilensteine.
 
 ## Den Prototyp auf der Quest ausprobieren
 
-Im heutigen Versuchsaufbau laufen die Munava-Web-App im Browser einer Meta Quest und ChatGPT mit Codex auf einem Laptop gleichzeitig. Der Sprachmodus dient dem Gespräch über Änderungen; optional zeigt Quest Remote Desktop den Laptopbildschirm in der Brille. Für einen Test auf der Quest muss die zuvor geprüfte Sites-Version bewusst veröffentlicht sein, denn die auf der Brille erreichbare Deployment-URL ist live.
+Im Versuchsaufbau laufen Munava im Browser einer Meta Quest und ChatGPT mit Codex auf dem Laptop gleichzeitig. Der Sprachmodus dient dem Gespräch über Änderungen; optional zeigt Quest Remote Desktop den Laptopbildschirm in der Brille. Auf der Quest lässt sich nur eine veröffentlichte Sites-Version testen.
 
-1. Öffne die bereitgestellte Munava-Web-App im Browser der Quest und wähle ein Holodeck-Programm.
-2. Starte den Sprachmodus mit Codex auf dem Laptop und beschreibe die gewünschte Änderung.
-3. Prüfe den geänderten Quellstand und den lokalen Build. Speichere eine Sites-Version aus genau diesem Stand und prüfe sie vor dem Deployment.
-4. Veröffentliche die geprüfte Version nur, wenn die Änderung live gehen soll. Prüfe anschließend auf der Quest, ob die geöffnete Anwendung die neue Programmfassung übernimmt, ohne die WebXR-Sitzung zu beenden.
+1. Öffne die Munava-Site im Quest-Browser und wähle ein Holodeck-Programm.
+2. Beschreibe im Sprachmodus mit Codex auf dem Laptop die gewünschte Änderung.
+3. Prüfe den geänderten Quellstand und den lokalen Build. Lege daraus eine neue Sites-Version an und prüfe sie.
+4. Veröffentliche diese Version, wenn die Änderung live gehen soll. Prüfe auf der Quest, ob die neue Programmfassung ohne Ende der WebXR-Sitzung übernommen wird.
 
-Der Kreislauf wird schrittweise automatisiert. Bereits heute können neue Programmfassungen ohne vollständiges Neuladen der Seite übernommen werden; das ist kein Ersatz für die vorherige Prüfung der Änderung.
-
-## Sicherheitsgrenzen
-
-- Secrets bleiben vollständig in den serverseitigen Umgebungen.
-- Kurzlebige und inhaltlich begrenzte Tickets ersetzen ein gemeinsames Dauertoken.
-- Die private Signatur erfolgt im Worker, die Prüfung mit dem öffentlichen Schlüssel auf dem Echtzeitserver.
-- Die Browserherkunft für die öffentliche WebSocket-Verbindung wird ausdrücklich freigegeben.
-- Skripte und Werkzeuge werden nur nach ausdrücklicher Freigabe ausgeführt.
+Prüfe bei Änderungen an Anmeldung oder Mehrspieler-Funktionen außerdem den sichtbaren Verbindungsstatus und ein gemeinsames Objekt auf Desktop und Quest.
 
 ## Weiterführende Dokumentation
 

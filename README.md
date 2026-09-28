@@ -68,7 +68,7 @@ Den Kern der Idee kannst du heute bereits erproben: Du erlebst eine Welt, bespri
 
 **Das Zusammenspiel in der Praxis:** Beide Anwendungen laufen gleichzeitig: Du erlebst das Holodeck-Programm im Browser deiner VR-Brille und sprichst mit dem KI-System auf deinem PC oder Laptop. Diese Trennung ist in unserem Prototyp bewusst gewählt: So können wir uns zunächst auf die Weiterentwicklung von Munava konzentrieren, ohne dafür ein eigenes KI-System entwickeln zu müssen. Später könnte das KI-System direkt in Munava integriert werden.
 
-**Einfache Installation:** Geplant ist ein ChatGPT-Plugin, das dem Desktop-Agenten klare Installationsanweisungen bereitstellt. So kann die KI bereits bei der Installation und Einrichtung deiner eigenen Munava-Installation unterstützen. Dieses Repository dient dabei als Quelle für die Projektdateien, den Programmcode und die Dokumentation.
+**Einfache Installation:** Geplant ist ein ChatGPT-Plugin, das dem Desktop-Agenten klare Installationsanweisungen bereitstellt. So kann die KI bereits bei der Installation und Einrichtung deiner eigenen Munava-Installation unterstützen. Das öffentliche GitHub-Repository liefert dafür einen Ausgangsstand mit Code und Dokumentation; die Weiterentwicklung einer bestehenden Site erfolgt in deren eigener Quellcodeverwaltung.
 
 Den Versuchsaufbau und die konkreten Schritte erklärt [Installation, Entwicklung und Betrieb](docs/installation.md). Die ergänzenden Arbeitsanweisungen für KI-Agenten stehen in [AGENTS.md](AGENTS.md).
 
@@ -135,9 +135,15 @@ Die technischen Voraussetzungen zur Umsetzung eines Holodeck-ähnlichen Systems 
 
 Der Munava-Prototyp geht diese Herausforderungen schrittweise an. Im Mittelpunkt steht zunächst der vollständige Kreislauf vom gesprochenen Wunsch bis zur sichtbaren Veränderung und zum gemeinsam gespeicherten Stand von Programm und Welt.
 
-## ChatGPT Sites mit einem Klon verbinden
+## Hosting mit ChatGPT Sites
 
-Die Zuordnung zu einem Sites-Projekt wird lokal in `.openai/hosting.json` gespeichert. Dieser Ordner ist nicht Teil des öffentlichen Repositories und wird von Git ignoriert. Richte für eine eigene Installation eine eigene Site ein. Wenn du an einer bereits bestehenden Site weiterarbeitest, identifiziere sie zuerst über ein berechtigtes Sites-Konto und stelle ihre Zuordnung im lokalen Klon wieder her. Prüfe vor dem Speichern einer Version, dass der Klon mit der beabsichtigten Site verbunden ist; lege bei unklarer Zuordnung nicht versehentlich ein neues Projekt an. Zugangsdaten und Secrets gehören nicht in diese Datei.
+Mit [ChatGPT Sites](https://learn.chatgpt.com/docs/sites) lässt sich die Munava-Web-App über eine HTTPS-Adresse bereitstellen. Dazu nutzt ChatGPT das zugehörige Sites-Plugin. Es liefert Werkzeuge und Skripte, um eine Site anzulegen, ihren Quellcode zu übernehmen, die gebaute Anwendung für Sites vorzubereiten, neue Versionen zu erstellen oder zu veröffentlichen. Dabei hat jedes Sites-Projekt ein eigenes Git-Repository für den Quellcode, unabhängig vom öffentlichen Munava-Repository auf GitHub. Sites verwaltet außerdem eigene Versionen der Anwendung; sie sind nicht dasselbe wie Git-Commits. Eine neue Version kann zunächst zum Prüfen gespeichert werden. Erst eine gesonderte Veröffentlichung macht sie live.
+
+**Neue Site einrichten:** ChatGPT klont das öffentliche GitHub-Repository lokal und legt eine neue Site an. Dabei verwendet es keinen Sites-Starter, damit kein unnötiger Beispielcode entsteht. Sites vergibt für das neue Projekt eine Kennung. ChatGPT hinterlegt sie in `.openai/hosting.json` im lokalen Klon; damit ist festgelegt, zu welcher Site dieser Klon gehört. Das Sites-Plugin überträgt den Munava-Quellcode in das Git-Repository der neuen Site. Außerdem baut ChatGPT die Anwendung lokal. Die gebauten Dateien im Ordner `dist/` werden als separates Paket für Sites vorbereitet. Aus dem übertragenen Quellstand und dem dazugehörigen Paket legt ChatGPT die erste Site-Version an. Sie wird nur auf ausdrücklichen Wunsch in einem gesonderten Schritt veröffentlicht.
+
+**Bestehende Site weiterentwickeln:** ChatGPT arbeitet mit einer lokalen Arbeitskopie des Git-Repositories der Site. Fehlt sie noch, klont ChatGPT das Repository lokal; andernfalls gleicht ChatGPT den lokalen Arbeitsstand mit dem Stand des Sites-Repositories ab. Nach den Änderungen prüft und baut ChatGPT die Anwendung lokal. Es sichert den Quellstand als Git-Commit und überträgt ihn mit dem Sites-Plugin an das Git-Repository der Site. Die dazu passenden gebauten Dateien werden als separates Paket übergeben. Daraus legt ChatGPT eine neue Site-Version an. Auch diese Version wird erst nach ausdrücklicher Freigabe gesondert veröffentlicht.
+
+Den genauen Ablauf beschreibt die [Installationsanleitung](docs/installation.md).
 
 ## Lizenz
 
